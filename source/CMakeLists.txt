@@ -226,6 +226,18 @@ ENDIF (NMZ_SCIP)
 
 INSTALL(TARGETS normaliz DESTINATION bin)
 
+# CREATE PKGCONFIG FILES
+# Only do this on Windows for Cygwin - the files don't make much sense outside
+# a UNIX look alike
+if(NOT WIN32 OR CYGWIN OR MINGW)
+#  SET(PKG_CONFIG_REQUIRES glib-2.0)
+  SET(PKG_CONFIG_LIBS       "" )
+  SET(PKG_CONFIG_CFLAGS     "-I\${includedir} ${CMAKE_CXX_FLAGS}" )
+  CONFIGURE_FILE( "${CMAKE_CURRENT_SOURCE_DIR}/pkg-config.pc.cmake"
+                  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc" )
+  INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc"
+          DESTINATION lib${LIB_SUFFIX}/pkg-config )
+endif(NOT WIN32 OR CYGWIN OR MINGW)
 
 #custom make targets
 ADD_CUSTOM_TARGET (uninstall @echo uninstall package)
