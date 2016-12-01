@@ -12,7 +12,8 @@ AC_CONFIG_FILES([Makefile
 	source/Makefile
 	source/libnormaliz/version.h
 	example/Makefile
-	test/Makefile])
+	test/Makefile
+	python/Makefile])
 AC_CONFIG_MACRO_DIR([m4])
 AC_PROG_CXX
 AX_CXX_COMPILE_STDCXX(11, , optional)
@@ -178,5 +179,34 @@ AS_IF([test x$have_cocoa = xyes],
 AC_SUBST(COCOA_LIBS)
 AC_SUBST(COCOA_CPPFLAGS)
 AM_CONDITIONAL(NMZ_INTEGRATE, test x$enable_nmzintegrate = xyes)
+
+## Python2
+AC_ARG_ENABLE([python2],
+   [AS_HELP_STRING([--enable-python2@<:@=ARG@:>@]
+      [builds the python2 PyNormaliz module, to use Normaliz from python (requires python2) @<:@default=no@:>@ ])],
+   [:],
+   [enable_python2=no])
+
+AS_IF([test "x$enable_python2" != xno],
+    [AC_CHECK_PROG([exec_python2],[python2],[yes],[no])
+     AS_IF([test "x$exec_python2" = xyes],[have_python2=yes],[AC_MSG_ERROR([required program 'python2' not found.])])
+    ])
+
+## Python3
+AC_ARG_ENABLE([python3],
+   [AS_HELP_STRING([--enable-python3@<:@=ARG@:>@]
+      [builds the python3 PyNormaliz module, to use Normaliz from python (requires python3) @<:@default=no@:>@ ])],
+   [:],
+   [enable_python3=no])
+
+AS_IF([test "x$enable_python3" != xno],
+    [AC_CHECK_PROG([exec_python3],[python3],[yes],[no])
+     AM_CONDITIONAL([FOUND_PYTHON3], [test "x$exec_python3" = xyes])
+     AS_IF([test "x$exec_python3" = xyes],[have_python3=yes],[AC_MSG_ERROR([required program 'python3' not found.])])
+    ])
+
+
+AM_CONDITIONAL([FOUND_PYTHON2], [test "x$have_python2" = xyes])
+AM_CONDITIONAL([FOUND_PYTHON3], [test "x$have_python3" = xyes])
 
 AC_OUTPUT

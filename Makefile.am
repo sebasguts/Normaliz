@@ -2,7 +2,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 AUTOMAKE_OPTIONS = dist-zip
 
-SUBDIRS = source test example
+SUBDIRS = source test example python
 
 EXTRA_DIST = bootstrap.sh CHANGELOG .travis.yml .travis-build.sh
 
@@ -12,3 +12,14 @@ EXTRA_DIST += doc/Normaliz.pdf doc/NmzIntegrate.pdf
 
 # TODO: directory tools? playground? linear_algebra_test?
 # TODO: jNormaliz? java libs in lib/? documentation (papers)?
+
+# FIXME: Is this an okay way to do this:
+.PHONY: install-python2 install-python3
+
+install-python2:
+	cd python
+	make install-python2
+
+install-python3:
+	cd python
+	make install-python3
