@@ -1,0 +1,13 @@
+#!/bin/bash
+
+./install_normaliz_with_eantic.sh
+
+export NORMALIZ_LOCAL_DIR=${PWD}/local
+export CPPFLAGS="-I${PWD}/local/include"
+export LDFLAGS="-L${PWD}/local/lib"
+
+git clone https://github.com/Normaliz/PyNormaliz
+
+cd PyNormaliz
+
+python setup.py install --user
